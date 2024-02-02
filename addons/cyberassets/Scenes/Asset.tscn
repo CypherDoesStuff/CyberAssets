@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3 uid="uid://byns7pc4xcxas"]
+
+[ext_resource type="Script" path="res://addons/cyberassets/Scripts/Asset.gd" id="1_fx6hr"]
+[ext_resource type="Texture2D" uid="uid://cfaujhbr7ffjv" path="res://icon.png" id="1_knmjv"]
+[ext_resource type="Texture2D" uid="uid://brfokd5ebouam" path="res://addons/cyberassets/Icons/favorite_border.svg" id="3_2258l"]
+[ext_resource type="Script" path="res://addons/cyberassets/Scripts/UI/FavoriteToggle.gd" id="4_3vtob"]
+[ext_resource type="Texture2D" uid="uid://ccyfu4qtby35r" path="res://addons/cyberassets/Icons/favorite.svg" id="5_cuyx5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5dctg"]
+
+[node name="Asset" type="PanelContainer" node_paths=PackedStringArray("texButton", "nameButton", "authorButton", "licenseLabel", "favoriteButton")]
+clip_contents = true
+custom_minimum_size = Vector2(400, 110)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -752.0
+offset_bottom = -538.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_fx6hr")
+texButton = NodePath("MarginContainer/HBoxContainer/TextureButton")
+nameButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/Name")
+authorButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/Author")
+licenseLabel = NodePath("MarginContainer/HBoxContainer/VBoxContainer/License")
+favoriteButton = NodePath("MarginContainer/HBoxContainer/Button")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("1_knmjv")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "My Addon!"
+flat = true
+alignment = 0
+text_overrun_behavior = 3
+
+[node name="Type" type="LinkButton" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.501961, 0.501961, 0.501961, 1)
+text = "Tools"
+underline = 1
+
+[node name="Author" type="LinkButton" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.501961, 0.501961, 0.501961, 1)
+text = "Cyber"
+underline = 1
+
+[node name="License" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.501961, 0.501961, 0.501961, 1)
+text = "Mit"
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5dctg")
+toggle_mode = true
+icon = ExtResource("3_2258l")
+flat = true
+vertical_icon_alignment = 0
+script = ExtResource("4_3vtob")
+unpressedIcon = ExtResource("3_2258l")
+pressedIcon = ExtResource("5_cuyx5")

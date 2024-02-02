@@ -1,0 +1,428 @@
+[gd_scene load_steps=7 format=3 uid="uid://ert5chqnt2mi"]
+
+[ext_resource type="Script" path="res://addons/cyberassets/Scripts/AssetLib.gd" id="1_efkid"]
+[ext_resource type="Script" path="res://addons/cyberassets/Scripts/UI/PageSelect.gd" id="2_gbqgl"]
+[ext_resource type="Texture2D" uid="uid://cfaujhbr7ffjv" path="res://icon.png" id="2_wwwc1"]
+
+[sub_resource type="Image" id="Image_aaps4"]
+data = {
+"data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 68, 224, 224, 224, 184, 224, 224, 224, 240, 224, 224, 224, 232, 224, 224, 224, 186, 227, 227, 227, 62, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 129, 224, 224, 224, 254, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 122, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 68, 224, 224, 224, 254, 224, 224, 224, 254, 224, 224, 224, 123, 224, 224, 224, 32, 224, 224, 224, 33, 224, 224, 224, 125, 224, 224, 224, 254, 224, 224, 224, 254, 226, 226, 226, 69, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 184, 224, 224, 224, 255, 224, 224, 224, 123, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 125, 224, 224, 224, 255, 224, 224, 224, 174, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 240, 224, 224, 224, 255, 231, 231, 231, 31, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 226, 226, 226, 35, 224, 224, 224, 255, 224, 224, 224, 233, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 232, 224, 224, 224, 255, 224, 224, 224, 32, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 228, 228, 228, 37, 224, 224, 224, 255, 224, 224, 224, 228, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 186, 224, 224, 224, 255, 224, 224, 224, 123, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 130, 224, 224, 224, 255, 224, 224, 224, 173, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 227, 227, 227, 62, 224, 224, 224, 255, 224, 224, 224, 254, 224, 224, 224, 126, 224, 224, 224, 34, 227, 227, 227, 36, 224, 224, 224, 131, 224, 224, 224, 255, 224, 224, 224, 255, 226, 226, 226, 77, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 122, 224, 224, 224, 254, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 226, 226, 226, 69, 224, 224, 224, 174, 224, 224, 224, 233, 224, 224, 224, 228, 224, 224, 224, 173, 226, 226, 226, 77, 224, 224, 224, 210, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 210, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 210, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 210, 224, 224, 224, 227, 224, 224, 224, 34, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 34, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0),
+"format": "RGBA8",
+"height": 16,
+"mipmaps": false,
+"width": 16
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_wria6"]
+image = SubResource("Image_aaps4")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6yvf"]
+bg_color = Color(0, 0, 0, 0.239216)
+
+[node name="AssetLibrary" type="PanelContainer" node_paths=PackedStringArray("assetPageParent", "assetSearchBar", "assetImportButton", "assetManageButton", "searchBlocker", "installIcon", "installPanelTitle", "installDescription", "installButton", "installViewFilesButton", "assetShowPluginsButton", "assetSortOptions", "assetCategoryOptions", "assetSiteOptions", "assetSupportMenu", "pageSelectTop", "pageSelectBottom", "favouritePageParent", "apiRequest", "downloadRequest")]
+clip_contents = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("1_efkid")
+assetPageParent = NodePath("TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer/FlowContainer")
+assetSearchBar = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer/LineEdit")
+assetImportButton = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer/Button")
+assetManageButton = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer/Button2")
+searchBlocker = NodePath("TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/Panel")
+installIcon = NodePath("TabContainer/Asset Library/VBoxContainer2/MarginContainer/HBoxContainer/TextureRect")
+installPanelTitle = NodePath("TabContainer/Asset Library/VBoxContainer2/MarginContainer/HBoxContainer/RichTextLabel")
+installDescription = NodePath("TabContainer/Asset Library/VBoxContainer2/MarginContainer2/RichTextLabel")
+installButton = NodePath("TabContainer/Asset Library/VBoxContainer2/HBoxContainer/Button")
+installViewFilesButton = NodePath("TabContainer/Asset Library/VBoxContainer2/HBoxContainer/Button2")
+assetShowPluginsButton = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer/Button2")
+assetSortOptions = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer2/OptionButton")
+assetCategoryOptions = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer2/OptionButton2")
+assetSiteOptions = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer2/OptionButton3")
+assetSupportMenu = NodePath("TabContainer/Asset Library/VBoxContainer/HBoxContainer2/MenuButton")
+pageSelectTop = NodePath("TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer/Pages")
+pageSelectBottom = NodePath("TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer/Pages2")
+favouritePageParent = NodePath("TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer/FlowContainer")
+apiRequest = NodePath("HTTPRequest")
+downloadRequest = NodePath("HTTPRequest2")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 2
+tab_alignment = 1
+
+[node name="Asset Library" type="HBoxContainer" parent="TabContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/Asset Library"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Asset Library/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Asset Library/VBoxContainer2/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+texture = ExtResource("2_wwwc1")
+expand_mode = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Asset Library/VBoxContainer2/MarginContainer/HBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "My Asset!"
+
+[node name="MarginContainer2" type="MarginContainer" parent="TabContainer/Asset Library/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Asset Library/VBoxContainer2/MarginContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Test"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="TabContainer/Asset Library/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Asset Library/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Install"
+
+[node name="Control3" type="Control" parent="TabContainer/Asset Library/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="TabContainer/Asset Library/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "View Files"
+
+[node name="Control2" type="Control" parent="TabContainer/Asset Library/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="TabContainer/Asset Library/VBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Asset Library"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
+[node name="VisualSeperator" type="Control" parent="TabContainer/Asset Library/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer"]
+layout_mode = 2
+
+[node name="VisualSeperator" type="Control" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search Assets (Excluding Templates, Projects, and Demos)"
+clear_button_enabled = true
+right_icon = SubResource("ImageTexture_wria6")
+caret_blink = true
+caret_blink_interval = 0.5
+
+[node name="VSeperator" type="VSeparator" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Import..."
+
+[node name="Button2" type="Button" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Plugins..."
+
+[node name="VisualSeperator2" type="Control" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="VisualSeperator2" type="Control" parent="TabContainer/Asset Library/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer"]
+layout_mode = 2
+
+[node name="VisualSeperator" type="Control" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Sort: "
+
+[node name="OptionButton" type="OptionButton" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 6
+selected = 0
+fit_to_longest_item = false
+popup/item_0/text = "Recently Updated"
+popup/item_0/id = 0
+popup/item_1/text = "Least Recently Updated"
+popup/item_1/id = 1
+popup/item_2/text = "Name (A-Z)"
+popup/item_2/id = 2
+popup/item_3/text = "Name (Z-A)"
+popup/item_3/id = 3
+popup/item_4/text = "License (A-Z)"
+popup/item_4/id = 4
+popup/item_5/text = "License (Z-A)"
+popup/item_5/id = 5
+
+[node name="VSeperator" type="VSeparator" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Category: "
+
+[node name="OptionButton2" type="OptionButton" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 8
+selected = 0
+fit_to_longest_item = false
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "2D Tools"
+popup/item_1/id = 1
+popup/item_2/text = "3D Tools"
+popup/item_2/id = 2
+popup/item_3/text = "Shaders"
+popup/item_3/id = 3
+popup/item_4/text = "Materials"
+popup/item_4/id = 4
+popup/item_5/text = "Tools"
+popup/item_5/id = 5
+popup/item_6/text = "Scripts"
+popup/item_6/id = 6
+popup/item_7/text = "Misc"
+popup/item_7/id = 7
+
+[node name="VSeperator2" type="VSeparator" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Site: "
+
+[node name="OptionButton3" type="OptionButton" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 1
+selected = 0
+fit_to_longest_item = false
+popup/item_0/text = "godotengine.org (Official)"
+popup/item_0/id = 0
+
+[node name="VSeperator3" type="VSeparator" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="MenuButton" type="MenuButton" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+keep_pressed_outside = true
+text = "Support"
+item_count = 3
+popup/item_0/text = "Official"
+popup/item_0/checkable = 1
+popup/item_0/checked = true
+popup/item_0/id = 0
+popup/item_1/text = "Community"
+popup/item_1/checkable = 1
+popup/item_1/checked = true
+popup/item_1/id = 1
+popup/item_2/text = "Testing"
+popup/item_2/checkable = 1
+popup/item_2/id = 2
+
+[node name="VisualSeperator2" type="Control" parent="TabContainer/Asset Library/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Asset Library/VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="VisualSeperator" type="Control" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Pages" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_gbqgl")
+maxPage = 22
+maxPageButtonCount = 10
+
+[node name="VisualSeperator2" type="Control" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="FlowContainer" type="FlowContainer" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VisualSeperator3" type="Control" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Pages2" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_gbqgl")
+maxPage = 22
+maxPageButtonCount = 10
+
+[node name="Panel" type="Panel" parent="TabContainer/Asset Library/VBoxContainer/PanelContainer/ScrollContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_o6yvf")
+
+[node name="Favorites" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Favorites"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Favorites/PanelContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Favorites/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="VisualSeperator" type="Control" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Pages" type="HBoxContainer" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_gbqgl")
+maxPage = 22
+maxPageButtonCount = 10
+
+[node name="VisualSeperator2" type="Control" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="FlowContainer" type="FlowContainer" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VisualSeperator3" type="Control" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Pages2" type="HBoxContainer" parent="TabContainer/Favorites/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_gbqgl")
+maxPage = 22
+maxPageButtonCount = 10
+
+[node name="Local" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Local"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Local/PanelContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Local/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="VisualSeperator" type="Control" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Pages" type="HBoxContainer" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_gbqgl")
+maxPage = 22
+maxPageButtonCount = 10
+
+[node name="VisualSeperator2" type="Control" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="FlowContainer" type="FlowContainer" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VisualSeperator3" type="Control" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Pages2" type="HBoxContainer" parent="TabContainer/Local/PanelContainer/ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_gbqgl")
+maxPage = 22
+maxPageButtonCount = 10
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+use_threads = true
+
+[node name="HTTPRequest2" type="HTTPRequest" parent="."]
+use_threads = true
