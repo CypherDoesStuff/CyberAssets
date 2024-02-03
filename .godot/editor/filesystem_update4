@@ -1,6 +1,2 @@
-res://addons/cyberassets/Scenes/AssetLibrary.tscn
-res://addons/cyberassets/Scripts/AssetLib.gd
-res://addons/cyberassets/Scripts/AssetApi.gd
 res://addons/cyberassets/Scripts/AssetInstaller.gd
-res://addons/cyberassets/Scripts/Asset.gd
-res://addons/cyberassets/Scenes/Asset.tscn
+res://addons/cyberassets/Scripts/AssetLib.gd

@@ -236,7 +236,6 @@ func set_preview_asset_icon(texture : Texture2D):
 
 func install():
 	if !previewDownloadUrl.is_empty():
-		print("installing!")
 		install_download(previewDownloadUrl, previewId)
 
 func install_id(id : String):
@@ -260,8 +259,13 @@ func install_zip(path : String):
 		printerr("Cyber Asset: Failed to get zip files!")
 
 	var isCanceled = await _on_install_window_response
+	var installed
+
 	if !isCanceled:
-		installer.install_from_zip(path, installIgnoreAssetRoot.button_pressed, install_get_file_selection())
+		installed = installer.install_from_zip(path, installIgnoreAssetRoot.button_pressed, install_get_file_selection(), ProjectSettings.globalize_path(installPath))
+
+	if installed:
+		print(str("Cyber Asset: Installed ", previewTitle, " Sucessfully!"))
 
 func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
 	installWindowName.text = previewTitle.text
@@ -269,12 +273,11 @@ func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
 
 	installTreeDict = {}
 	var installTreeItems = {}
-	var installDir = EditorInterface.get_editor_paths().get_cache_dir().path_join("temp_testing")
 
 	installTree.clear()
 
 	var parentItem = installTree.create_item()
-	parentItem.set_text(0, installDir)
+	parentItem.set_text(0, installPath)
 
 	for index in assetFiles.size():
 		var dir = assetFiles[index]
@@ -297,7 +300,7 @@ func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
 			pathSegment = pathFull[0]
 			treeItem = installTree.create_item(parentItem)
 
-		var itemConflict = check_dir_or_file_exists((installDir.path_join("/".join(pathFull))))
+		var itemConflict = check_dir_or_file_exists((installPath.path_join("/".join(pathFull))))
 		if itemConflict:
 			conflicts = true
 

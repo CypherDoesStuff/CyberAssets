@@ -18,14 +18,12 @@ static func download(assetUrl : String, assetId : String, downloadRequest : HTTP
 		pass
 	return ""
 
-static func install_from_zip(path : String, ignoreRoot : bool, installDirs : Dictionary):
+static func install_from_zip(path : String, ignoreRoot : bool, installDirs : Dictionary, installPath : String) -> bool:
 	var reader = ZIPReader.new()
 	var error = reader.open(path)
 
 	if error == OK:
-		var installDir = EditorInterface.get_editor_paths().get_cache_dir().path_join("temp_testing")
-		error = DirAccess.make_dir_absolute(installDir)
-		if DirAccess.dir_exists_absolute(installDir):
+		if DirAccess.dir_exists_absolute(installPath):
 			var assetFiles = reader.get_files()
 
 			for dir in assetFiles:
@@ -37,18 +35,15 @@ static func install_from_zip(path : String, ignoreRoot : bool, installDirs : Dic
 					continue
 				if installDirs[dir]:
 					if !assetDir.ends_with("/"):
-						var file := FileAccess.open(installDir.path_join(assetDir), FileAccess.WRITE)
+						var file := FileAccess.open(installPath.path_join(assetDir), FileAccess.WRITE)
 						if file:
 							file.store_buffer(reader.read_file(dir))
 					else:
-						error = DirAccess.make_dir_absolute(installDir.path_join(assetDir))
-						if error != OK:
-							print(str("error", error))
-		
+						error = DirAccess.make_dir_absolute(installPath.path_join(assetDir))	
 	else:
-		printerr("CyberAsset: Failed to download asset")
-
+		printerr(str("CyberAsset: Failed to download asset: ", error))
 	reader.close()
+	return error == OK
 
 static func get_zip_files_from_path(path : String) -> Array:
 	var reader = ZIPReader.new()
