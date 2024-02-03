@@ -4,7 +4,6 @@ extends Node
 static func download(assetUrl : String, assetId : String, downloadRequest : HTTPRequest) -> String:
 	if !assetUrl.is_empty():
 		#blah blah download
-		print("downloading!")
 		downloadRequest.cancel_request()
 
 		var assetPath = EditorInterface.get_editor_paths().get_cache_dir().path_join(str("tmp_asset_", assetId, ".zip"))

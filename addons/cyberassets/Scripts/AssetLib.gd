@@ -265,7 +265,8 @@ func install_zip(path : String):
 		installed = installer.install_from_zip(path, installIgnoreAssetRoot.button_pressed, install_get_file_selection(), ProjectSettings.globalize_path(installPath))
 
 	if installed:
-		print(str("Cyber Asset: Installed ", previewTitle, " Sucessfully!"))
+		EditorInterface.get_resource_filesystem().scan()
+		print(str("Cyber Asset: Installed ", previewTitle.text, " Sucessfully!"))
 
 func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
 	installWindowName.text = previewTitle.text
