@@ -18,6 +18,7 @@ extends Node
 @export var previewInstallButton : Button
 @export var previewViewFilesButton : Button
 @export var previewCloseButton : Button
+@export var previewThumbnails : Control
 
 @export_group("Install")
 @export var installWindow : ConfirmationDialog
@@ -221,6 +222,7 @@ func set_preview_asset(id):
 	searchBlocker.visible = true
 	var data = await api.request_asset_from_id(apiUrl, id, apiRequest)
 
+
 	if !data.is_empty():
 		previewTitle.text = data["title"]
 		previewDescription.text = data["description"]
@@ -228,11 +230,22 @@ func set_preview_asset(id):
 		previewDownloadUrl = data["download_url"]
 		api.request_image(data["icon_url"], useThreads, set_preview_asset_icon)
 
+		for preview in previewThumbnails.get_children(): preview.queue_free()
+		for preview in data["previews"]:
+			api.request_image(preview["thumbnail"], useThreads, add_preview_thumbnail)
+
 	previewPanel.visible = true
 	searchBlocker.visible = false
 
 func set_preview_asset_icon(texture : Texture2D):
 	previewIcon.texture = texture
+
+func add_preview_thumbnail(texture : Texture2D):
+	var thumb = TextureRect.new()
+	thumb.texture = texture
+	thumb.expand_mode = TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
+	thumb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	previewThumbnails.add_child(thumb)
 
 func install():
 	if !previewDownloadUrl.is_empty():

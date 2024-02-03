@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://addons/cyberassets/Scripts/UI/PageSelect.gd" id="2_gbqgl"]
 [ext_resource type="Texture2D" uid="uid://cfaujhbr7ffjv" path="res://icon.png" id="2_wwwc1"]
 
-[sub_resource type="Image" id="Image_7vhdk"]
+[sub_resource type="Image" id="Image_x2084"]
 data = {
 "data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 68, 224, 224, 224, 184, 224, 224, 224, 240, 224, 224, 224, 232, 224, 224, 224, 186, 227, 227, 227, 62, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 129, 224, 224, 224, 254, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 122, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 68, 224, 224, 224, 254, 224, 224, 224, 254, 224, 224, 224, 123, 224, 224, 224, 32, 224, 224, 224, 33, 224, 224, 224, 125, 224, 224, 224, 254, 224, 224, 224, 254, 226, 226, 226, 69, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 184, 224, 224, 224, 255, 224, 224, 224, 123, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 125, 224, 224, 224, 255, 224, 224, 224, 174, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 240, 224, 224, 224, 255, 231, 231, 231, 31, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 226, 226, 226, 35, 224, 224, 224, 255, 224, 224, 224, 233, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 232, 224, 224, 224, 255, 224, 224, 224, 32, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 228, 228, 228, 37, 224, 224, 224, 255, 224, 224, 224, 228, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 186, 224, 224, 224, 255, 224, 224, 224, 123, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 130, 224, 224, 224, 255, 224, 224, 224, 173, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 227, 227, 227, 62, 224, 224, 224, 255, 224, 224, 224, 254, 224, 224, 224, 126, 224, 224, 224, 34, 227, 227, 227, 36, 224, 224, 224, 131, 224, 224, 224, 255, 224, 224, 224, 255, 226, 226, 226, 77, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 224, 224, 224, 122, 224, 224, 224, 254, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 226, 226, 226, 69, 224, 224, 224, 174, 224, 224, 224, 233, 224, 224, 224, 228, 224, 224, 224, 173, 226, 226, 226, 77, 224, 224, 224, 210, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 210, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 210, 224, 224, 224, 255, 224, 224, 224, 210, 231, 231, 231, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 210, 224, 224, 224, 227, 224, 224, 224, 34, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 231, 231, 231, 21, 224, 224, 224, 34, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0),
 "format": "RGBA8",
@@ -14,12 +14,12 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_8awvl"]
-image = SubResource("Image_7vhdk")
+image = SubResource("Image_x2084")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6yvf"]
 bg_color = Color(0, 0, 0, 0.239216)
 
-[node name="AssetLibrary" type="PanelContainer" node_paths=PackedStringArray("assetPageParent", "assetSearchBar", "assetManageButton", "assetPageScroll", "searchBlocker", "previewPanel", "previewIcon", "previewTitle", "previewDescription", "previewInstallButton", "previewViewFilesButton", "previewCloseButton", "installWindow", "installLocationWindow", "installWindowName", "installTree", "installChangePathButton", "installIgnoreAssetRoot", "installConflictsLabel", "importButton", "importFileDialouge", "assetShowPluginsButton", "assetSortOptions", "assetCategoryOptions", "assetSiteOptions", "assetSupportMenu", "pageSelectTop", "pageSelectBottom", "favouritePageParent", "apiRequest", "downloadRequest")]
+[node name="AssetLibrary" type="PanelContainer" node_paths=PackedStringArray("assetPageParent", "assetSearchBar", "assetManageButton", "assetPageScroll", "searchBlocker", "previewPanel", "previewIcon", "previewTitle", "previewDescription", "previewInstallButton", "previewViewFilesButton", "previewCloseButton", "previewThumbnails", "installWindow", "installLocationWindow", "installWindowName", "installTree", "installChangePathButton", "installIgnoreAssetRoot", "installConflictsLabel", "importButton", "importFileDialouge", "assetShowPluginsButton", "assetSortOptions", "assetCategoryOptions", "assetSiteOptions", "assetSupportMenu", "pageSelectTop", "pageSelectBottom", "favouritePageParent", "apiRequest", "downloadRequest")]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,6 +40,7 @@ previewDescription = NodePath("TabContainer/Asset Library/VBoxContainer2/MarginC
 previewInstallButton = NodePath("TabContainer/Asset Library/VBoxContainer2/HBoxContainer/Button")
 previewViewFilesButton = NodePath("TabContainer/Asset Library/VBoxContainer2/HBoxContainer/Button2")
 previewCloseButton = NodePath("TabContainer/Asset Library/VBoxContainer2/HBoxContainer/Button3")
+previewThumbnails = NodePath("TabContainer/Asset Library/VBoxContainer2/MarginContainer3/ScrollContainer/VBoxContainer")
 installWindow = NodePath("ConfirmationDialog")
 installLocationWindow = NodePath("FileDialog")
 installWindowName = NodePath("ConfirmationDialog/VBoxContainer/HBoxContainer/Label2")
@@ -107,6 +108,22 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 size_flags_vertical = 3
 text = "Test"
+
+[node name="MarginContainer3" type="MarginContainer" parent="TabContainer/Asset Library/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Asset Library/VBoxContainer2/MarginContainer3"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Asset Library/VBoxContainer2/MarginContainer3/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Asset Library/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 35)
