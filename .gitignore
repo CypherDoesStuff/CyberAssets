@@ -2,6 +2,7 @@
 *
 
 !.gitignore
+!addons/*
 !addons/cyberassets/*
 !addons/cyberassets/Icons/*
 !addons/cyberassets/Scripts/*
