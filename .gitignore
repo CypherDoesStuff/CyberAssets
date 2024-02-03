@@ -1,2 +1,9 @@
 # Godot 4+ specific ignores
-.godot/
+*
+
+!.gitignore
+!addons/cyberassets/*
+!addons/cyberassets/Icons/*
+!addons/cyberassets/Scripts/*
+!addons/cyberassets/Scripts/UI/*
+!addons/cyberassets/Scenes/*
