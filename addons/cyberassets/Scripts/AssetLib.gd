@@ -6,16 +6,31 @@ extends Node
 @export_group("Search")
 @export var assetPageParent : Control
 @export var assetSearchBar : LineEdit
-@export var assetImportButton : Button
 @export var assetManageButton : Button
+@export var assetPageScroll : ScrollContainer
 @export var searchBlocker : Control
 
+@export_group("Preview")
+@export var previewPanel : Control
+@export var previewIcon : TextureRect
+@export var previewTitle : RichTextLabel
+@export var previewDescription : RichTextLabel
+@export var previewInstallButton : Button
+@export var previewViewFilesButton : Button
+@export var previewCloseButton : Button
+
 @export_group("Install")
-@export var installIcon : TextureRect
-@export var installPanelTitle : RichTextLabel
-@export var installDescription : RichTextLabel
-@export var installButton : Button
-@export var installViewFilesButton : Button
+@export var installWindow : ConfirmationDialog
+@export var installLocationWindow : FileDialog
+@export var installWindowName : Label
+@export var installTree : Tree
+@export var installChangePathButton : Button
+@export var installIgnoreAssetRoot : CheckBox
+@export var installConflictsLabel : Label
+
+@export_group("Import")
+@export var importButton : Button
+@export var importFileDialouge : FileDialog
 
 @export_group("Filters")
 @export var assetShowPluginsButton : Button
@@ -42,29 +57,49 @@ const assetScene = preload("res://addons/cyberassets/Scenes/Asset.tscn")
 const assetDefaultUrl = "https://godotengine.org/asset-library/api"
 const assetFilterSearchTime = 0.25
 
-var assetUrl : String = assetDefaultUrl
+#api
+const apiScript = preload("res://addons/cyberassets/Scripts/AssetApi.gd")
+const installer = preload("res://addons/cyberassets/Scripts/AssetInstaller.gd")
+
+const installDefaultPath = "res://"
+
+var api = apiScript.new()
+var apiUrl : String = assetDefaultUrl
+
+#filters
 var assetFilter : String = ""
 var assetCategory : int = 0
 var assetReverse : bool = false
 var assetVersion : String
-
 var assetPage : int = 0
 var assetSort : String
 var assetSupport : Array = [1,1,0]
 
+var assetPageAssets : Array = []
+
+#preview
+var previewId : String
+var previewDownloadUrl : String
+var previewFileUrl : String
+
+#install
+var installPath : String = installDefaultPath
+var installFiles : Array
+var installTreeDict : Dictionary
+
+var initalize : bool
 var useThreads : bool
 var availableUrls : Dictionary 
-
-var imageQueue : Dictionary = {}
-var imageQueueLastID : int = 0
-
 var favorites : Dictionary
 
-var installPreviewId : String
-var installDownloadUrl : String
-var installPreviewUrl : String
+signal _on_install_window_response(isCancel)
 
 func _ready() -> void:
+	if !initalize:
+		return 
+
+	add_child(api)
+
 	# Engine settings
 	assetVersion = str(Engine.get_version_info()["major"], ".", Engine.get_version_info()["minor"])
 	useThreads = EditorInterface.get_editor_settings().get_setting("asset_library/use_threads")
@@ -75,12 +110,21 @@ func _ready() -> void:
 
 	# Additional ui setup
 	searchBlocker.visible = false
+	previewPanel.visible = false
 
 	assetSearchBar.right_icon = EditorInterface.get_editor_theme().get_icon("Search", "EditorIcons")
 
 	assetSiteOptions.clear()
 	for key in availableUrls:
 		assetSiteOptions.add_item(key)
+
+	installWindow.set_unparent_when_invisible(true)
+	installLocationWindow.set_unparent_when_invisible(true)
+	importFileDialouge.set_unparent_when_invisible(true)
+
+	remove_child(installWindow)
+	remove_child(installLocationWindow)
+	remove_child(importFileDialouge)
 
 	# Signal hookups
 	assetSearchBar.text_changed.connect(_on_asset_search)
@@ -92,11 +136,22 @@ func _ready() -> void:
 	assetSupportPopup = assetSupportMenu.get_popup()
 	assetSupportPopup.id_pressed.connect(_on_asset_support)
 
+	importButton.pressed.connect(_import_dialouge_show)
+	importFileDialouge.file_selected.connect(_import_file)
+
 	pageSelectTop.connect("_page_selected", _on_asset_page)
 	pageSelectBottom.connect("_page_selected", _on_asset_page)
 
-	installButton.pressed.connect(_install_asset)
-	installViewFilesButton.pressed.connect(_open_install_file_url)
+	previewInstallButton.pressed.connect(_preview_install)
+	previewViewFilesButton.pressed.connect(_preview_open_files)
+	previewCloseButton.pressed.connect(_preview_close)
+
+	installWindow.confirmed.connect(_install_confirm)
+	installWindow.canceled.connect(_install_cancel)
+	installTree.item_edited.connect(_install_tree_edited)
+	installIgnoreAssetRoot.pressed.connect(_install_ignore_parent_pressed)
+	installChangePathButton.pressed.connect(_install_change_path)
+	installLocationWindow.dir_selected.connect(_install_set_path)
 
 	# Timer for filter, so pressing enter isn't needed
 	assetFilterTimer = Timer.new()
@@ -106,10 +161,16 @@ func _ready() -> void:
 	assetFilterTimer.timeout.connect(search_asset_page)
 
 	var urlKey :String = assetSiteOptions.get_item_text(0)
-	assetUrl = availableUrls[urlKey]
+	apiUrl = availableUrls[urlKey]
 
 	search_asset_page()
 	pass
+
+func _exit_tree() -> void:
+	if initalize:
+		installWindow.queue_free()
+		installLocationWindow.queue_free()
+		importFileDialouge.queue_free()
 
 func search_asset_page():
 	var category := ""
@@ -117,83 +178,171 @@ func search_asset_page():
 		category = str(assetCategory)
 
 	searchBlocker.visible = true
-	request_assets(assetPage, assetFilter, category, assetVersion, assetSort, assetReverse, assetSupport)
-	pass
-
-func set_install_preview(id):
-	if(installPreviewId == id):
-		return
-
-	installPreviewId = id
-
-	apiRequest.cancel_request()
-	apiRequest.request(assetUrl.path_join(str("asset/", id)))
-
-	searchBlocker.visible = true
-
-	var result = await apiRequest.request_completed
-	if result[0] == OK:
-		var responseData = result[3].get_string_from_utf8()
-		var json : JSON = JSON.new()
-		var error : int = json.parse(responseData)
-		if error == OK:
-			installPanelTitle.text = json.data["title"]
-			installDescription.text = json.data["description"]
-			installPreviewUrl = json.data["browse_url"]
-			installDownloadUrl = json.data["download_url"]
-			request_image(json.data["icon_url"], set_install_preview_icon)
-		pass
+	var libraryData = await api.request_assets(apiUrl, apiRequest, assetPage, assetFilter, category, assetVersion, assetSort, assetReverse, assetSupport)
 
 	searchBlocker.visible = false
-
-	pass
-
-func set_install_preview_icon(texture : Texture2D):
-	installIcon.texture = texture
-
-func download():
-	if !installDownloadUrl.is_empty():
-		#blah blah download
-		print("downloading!")
-		downloadRequest.cancel_request()
-
-		var assetPath = EditorInterface.get_editor_paths().get_cache_dir().path_join(str("tmp_asset_", installPreviewId, ".zip"))
-		downloadRequest.download_file = assetPath
-		downloadRequest.request(installDownloadUrl)
-
-		var result = await downloadRequest.request_completed
-
-		if result[0] == OK:
-			install_from_zip(assetPath)
-		pass
-	pass
-
-func install_from_zip(path : String):
-	var reader = ZIPReader.new()
-	var error = reader.open(path)
-
-	if error == OK:
-		print("Yoinked Asset!")
-		print(reader.get_files())
+	if libraryData:
+		var assets = libraryData["result"]
+		var resultMaxPage : int = libraryData["pages"]
 		
-	else:
-		printerr("CyberAsset: Failed to download asset")
+		pageSelectTop.maxPage = resultMaxPage
+		pageSelectBottom.maxPage = resultMaxPage
 
-	reader.close()
+		pageSelectTop.set_page(assetPage, false)
+		pageSelectBottom.set_page(assetPage, false)
+
+		setup_page(assets)
+	pass
+
+func setup_page(assets : Array):
+	for asset in assetPageAssets:
+		asset.queue_free()
+
+	assetPageAssets.clear()
+
+	for assetData in assets:
+		var asset = assetScene.instantiate()
+
+		assetPageAssets.push_back(asset)
+		assetPageParent.add_child(asset)
+		asset.setup(assetData, self)
+	
+	assetPageScroll.set_deferred("scroll_vertical", 0)
+
+func request_image(assetUrl : String, onRecieved : Callable):
+	api.request_image(assetUrl, useThreads, onRecieved)
+
+func set_preview_asset(id):
+	if(previewId == id):
+		return
+
+	previewId = id
+
+	searchBlocker.visible = true
+	var data = await api.request_asset_from_id(apiUrl, id, apiRequest)
+
+	if !data.is_empty():
+		previewTitle.text = data["title"]
+		previewDescription.text = data["description"]
+		previewFileUrl = data["browse_url"]
+		previewDownloadUrl = data["download_url"]
+		api.request_image(data["icon_url"], useThreads, set_preview_asset_icon)
+
+	previewPanel.visible = true
+	searchBlocker.visible = false
+
+func set_preview_asset_icon(texture : Texture2D):
+	previewIcon.texture = texture
 
 func install():
-	if !installDownloadUrl.is_empty():
+	if !previewDownloadUrl.is_empty():
 		print("installing!")
-		download()
-		pass
-	pass
+		install_download(previewDownloadUrl, previewId)
+
+func install_id(id : String):
+	var assetData = await api.request_asset_from_id(apiUrl, id, apiRequest)
+	install_download(assetData["download_url"], id)
+
+func install_download(url : String, id : String):
+	var assetPath = await installer.download(url, id, downloadRequest)
+	if !assetPath.is_empty():
+		installPath = installDefaultPath
+		install_zip(assetPath)
+
+func install_zip(path : String):
+	installFiles = installer.get_zip_files_from_path(path)
+	if installFiles.size() > 0:
+		installIgnoreAssetRoot.button_pressed = true
+
+		update_install_dialouge(installFiles, true)
+		EditorInterface.popup_dialog_centered(installWindow)
+	else:
+		printerr("Cyber Asset: Failed to get zip files!")
+
+	var isCanceled = await _on_install_window_response
+	if !isCanceled:
+		installer.install_from_zip(path, installIgnoreAssetRoot.button_pressed, install_get_file_selection())
+
+func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
+	installWindowName.text = previewTitle.text
+	var conflicts = false
+
+	installTreeDict = {}
+	var installTreeItems = {}
+	var installDir = EditorInterface.get_editor_paths().get_cache_dir().path_join("temp_testing")
+
+	installTree.clear()
+
+	var parentItem = installTree.create_item()
+	parentItem.set_text(0, installDir)
+
+	for index in assetFiles.size():
+		var dir = assetFiles[index]
+
+		var pathFull = dir.split("/", false)
+
+		if ignoreRoot:
+			pathFull.remove_at(0)
+
+		var pathSegmentSize = pathFull.size()
+		var pathSegment
+		var treeItem
+
+		if pathSegmentSize <= 0:
+			continue
+		elif pathSegmentSize > 1:
+			pathSegment = pathFull[pathSegmentSize - 1]
+			treeItem = installTree.create_item(installTreeItems[pathFull[pathSegmentSize - 2]])
+		else:
+			pathSegment = pathFull[0]
+			treeItem = installTree.create_item(parentItem)
+
+		var itemConflict = check_dir_or_file_exists((installDir.path_join("/".join(pathFull))))
+		if itemConflict:
+			conflicts = true
+
+		treeItem.set_cell_mode(0, TreeItem.CELL_MODE_CHECK)
+		treeItem.set_text(0, pathSegment)
+		treeItem.set_editable(0, true)
+		treeItem.set_checked(0, !itemConflict)
+
+		installTreeItems[pathSegment] = treeItem
+		installTreeDict[dir] = treeItem
+
+	installConflictsLabel.text = "No Conflicts Found"
+	if conflicts:
+		installConflictsLabel.text = "File Conflicts Found"
+
+
+func install_get_file_selection() -> Dictionary:
+	var installFileSelection : Dictionary
+	for key in installTreeDict:
+		installFileSelection[key] = installTreeDict[key].is_checked(0) || installTreeDict[key].is_indeterminate(0)
+	return installFileSelection
+
+
+func check_dir_or_file_exists(path : String) -> bool:
+	if DirAccess.dir_exists_absolute(path) || FileAccess.file_exists(path): 
+		return true
+	
+	return false
+
+func set_search_filter(filter : String):
+	assetSearchBar.text = filter
+	assetFilter = filter
+	assetPage = 0
+	search_asset_page()
+
+func set_search_category(category : int):
+	assetCategoryOptions.selected = category
+	assetCategory = category
+	search_asset_page()
 
 #region UISignals
 func _on_asset_search(filter : String):
 	assetFilter = filter
 	assetPage = 0
 	assetFilterTimer.start(assetFilterSearchTime)
-	pass
 
 func _on_asset_sort(type : int):
 	#sneaky way to simplify this
@@ -213,7 +362,7 @@ func _on_asset_support(index : int):
 
 func _on_asset_site(site : int):
 	var key := assetSiteOptions.get_item_text(site)
-	assetUrl = availableUrls[key]
+	apiUrl = availableUrls[key]
 	search_asset_page()
 
 func _on_asset_page(page : int):
@@ -225,234 +374,46 @@ func _on_asset_page(page : int):
 
 	search_asset_page()
 
-func _open_install_file_url():
-	if !installPreviewUrl.is_empty():
-		OS.shell_open(installPreviewUrl)
-
-func _install_asset():
+func _preview_install():
 	install()
+
+func _preview_open_files():
+	if !previewFileUrl.is_empty():
+		OS.shell_open(previewFileUrl)
+
+func _preview_close():
+	previewPanel.visible = false
+
+func _install_confirm():
+	emit_signal("_on_install_window_response", false)
+
+func _install_cancel():
+	emit_signal("_on_install_window_response", true)
+
+func _install_tree_edited():
+	installTree.get_edited().propagate_check(0, false)
+
+func _install_ignore_parent_pressed():
+	update_install_dialouge(installFiles, installIgnoreAssetRoot.button_pressed)
+
+func _install_change_path():
+	EditorInterface.popup_dialog_centered(installLocationWindow)
+
+func _install_set_path(dir : String):
+	installPath = dir
+	print(installPath)
 
 func _manage_plugins():
 	#sneak in there and open up that settings window
 	var projectSettings = EditorInterface.get_base_control().get_node("/root/@EditorNode@17164/@Panel@13/@ProjectSettingsEditor@2246")
 	projectSettings.popup_centered()
 	projectSettings.get_node("@TabContainer@905").current_tab = 5
-	pass
-#endregion
 
-#region AssetLoading
-func request_assets(page: int, filter : String = "", category : String = "", version : String = "4", sort : String = "updated", reverse : bool = false, support: Array = [true,true,false]) -> void:	
-	var requestUrl := assetUrl.path_join("asset?page={page}&filter={fil}&category={cat}&godot_version={ver}&cost=&sort={sort}").format(
-	{
-		"page":page,
-		"fil":filter,
-		"cat":category,
-		"ver":version,
-		"sort":sort,
-	})
+func _import_dialouge_show():
+	EditorInterface.popup_dialog_centered(importFileDialouge)
 
-	if support[0]:
-		requestUrl = str(requestUrl, "&support[official]=1")
-	if support[1]:
-		requestUrl = str(requestUrl, "&support[community]=1")
-	if support[2]:
-		requestUrl = str(requestUrl, "&support[testing]=1")
-
-	if reverse:
-		requestUrl = str(requestUrl, "&reverse")
-
-	apiRequest.cancel_request()
-	apiRequest.request(requestUrl, ["User-Agent: CyberAssets", "Accept: application/vnd.github.v3+json"], HTTPClient.METHOD_GET, "")
-
-	var result : Array = await apiRequest.request_completed
-	searchBlocker.visible = false
-
-	if result[0] == OK:
-		var responseData : String = result[3].get_string_from_utf8()
-		var json : JSON = JSON.new()
-		var error : int = json.parse(responseData)
-
-		var assets : Array = json.data["result"]
-
-		# Go ahead and start showing the page!
-		if error == OK:	
-			var resultMaxPage : int = json.data["pages"]
-			
-			pageSelectTop.maxPage = resultMaxPage
-			pageSelectBottom.maxPage = resultMaxPage
-
-			pageSelectTop.set_page(assetPage, false)
-			pageSelectBottom.set_page(assetPage, false)
-
-			setup_page(assets)
-			pass
-		else:
-			printerr("CyberAsset: Failed to parse asset lib response! Something went wrong...")
-		pass
-	pass
-
-func setup_page(assets : Array):
-	#TEMP, start reusing
-	for asset in assetPageParent.get_children():
-		asset.queue_free()
-
-	for assetData in assets:
-		var asset = assetScene.instantiate()
-
-		assetPageParent.add_child(asset)
-		asset.setup(assetData["asset_id"], assetData["title"], assetData["author"], assetData["icon_url"], self)
-	pass
-
-func load_texture_from_buffer(buffer : PackedByteArray) -> Texture2D:
-	var image := Image.new()
-
-	var png_signature = PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10])
-	var jpg_signature = PackedByteArray([255, 216, 255])
-	var webp_signature = PackedByteArray([82, 73, 70, 70])
-	var bmp_signature = PackedByteArray([66, 77])
-		
-	var load_err = ERR_PARAMETER_RANGE_ERROR
-	if png_signature == buffer.slice(0, 8):
-		load_err = image.load_png_from_buffer(buffer)
-	elif jpg_signature == buffer.slice(0, 3):
-		load_err = image.load_jpg_from_buffer(buffer)
-	elif webp_signature == buffer.slice(0, 4):
-		load_err = image.load_webp_from_buffer(buffer)
-	elif bmp_signature == buffer.slice(0, 2):
-		load_err = image.load_bmp_from_buffer(buffer)
-	else:
-		load_err = image.load_svg_from_buffer(buffer)
-
-	if load_err == OK:
-		return ImageTexture.create_from_image(image)
-	else:
-		return null
-#endregion
-
-#region AssetImageCache
-
-func request_image(url : String, onRecieved : Callable):
-	var iReq : imageRequest = imageRequest.new()
-	iReq.url = url.strip_edges()
-	iReq.active = false
-	iReq.request = HTTPRequest.new()
-	iReq.request.use_threads = useThreads
-	iReq.onComplete = onRecieved
-	iReq.id = imageQueueLastID
-	imageQueueLastID += 1 
-
-	add_child(iReq.request)
-
-	iReq.request.request_completed.connect(image_request_complete.bind(iReq.id))
-	imageQueue[iReq.id] = iReq
-
-	image_update(true, false, [], iReq.id)
-	update_image_queue()
-	pass
-
-func image_request_complete(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray, id : int):
-	if !imageQueue.has(id): push_error(ERR_PARAMETER_RANGE_ERROR)
-	
-	if result == HTTPRequest.RESULT_SUCCESS && response_code < HTTPClient.RESPONSE_BAD_REQUEST:
-		if response_code != HTTPClient.RESPONSE_NOT_MODIFIED:
-			for i in headers.size():
-				if headers[i].findn("ETag:") == 0:
-					var cacheFilename : String = EditorInterface.get_editor_paths().get_cache_dir().path_join(str("assetimage_", imageQueue[id].url.md5_text()))
-					var newEtag : String = headers[i].substr(headers[i].find(":") + 1, headers[i].length()).strip_edges()
-					var file := FileAccess.open(str(cacheFilename + ".etag"), FileAccess.WRITE)
-					if file:
-						file.store_line(newEtag)
-
-					file = FileAccess.open(str(cacheFilename + ".data"), FileAccess.WRITE)
-					if file:
-						file.store_32(body.size())
-						file.store_buffer(body)
-	
-		image_update(response_code == HTTPClient.RESPONSE_NOT_MODIFIED, true, body, id)
-	
-	imageQueue[id].request.queue_free()
-	imageQueue.erase(id)
-
-	update_image_queue()
-
-
-func image_update(useCache : bool, final : bool, data : PackedByteArray, id : int):
-	#check cache for file data, if data, load
-
-	var imageSet : bool
-	var imageData : PackedByteArray = data
-
-	if useCache:
-		var cacheFilename : String = EditorInterface.get_editor_paths().get_cache_dir().path_join(str("assetimage_", imageQueue[id].url.md5_text()))
-
-		var file := FileAccess.open(str(cacheFilename, ".data"), FileAccess.READ)
-		if file:
-			var len := file.get_32()
-			imageData = file.get_buffer(len)
-		pass
-
-	var image := Image.new()
-
-	var png_signature = PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10])
-	var jpg_signature = PackedByteArray([255, 216, 255])
-	var webp_signature = PackedByteArray([82, 73, 70, 70])
-	var bmp_signature = PackedByteArray([66, 77])
-		
-	var load_err = ERR_PARAMETER_RANGE_ERROR
-	if png_signature == imageData.slice(0, 8):
-		load_err = image.load_png_from_buffer(imageData)
-	elif jpg_signature == imageData.slice(0, 3):
-		load_err = image.load_jpg_from_buffer(imageData)
-	elif webp_signature == imageData.slice(0, 4):
-		load_err = image.load_webp_from_buffer(imageData)
-	elif bmp_signature == imageData.slice(0, 2):
-		load_err = image.load_bmp_from_buffer(imageData)
-
-	var requestObject = imageQueue[id].onComplete.get_object()
-	if load_err == OK && !image.is_empty() && requestObject && !requestObject.is_queued_for_deletion():
-		var imgTexture := ImageTexture.create_from_image(image)
-		imageQueue[id].onComplete.call(imgTexture)
-		imageSet = true
-
-	pass
-
-func update_image_queue():	
-	#update image cache if nessesary
-	const maxImages : int = 6
-	var currentImages : int = 0
-
-	var toDelete : Array
-	for reqId in imageQueue:
-		var iReq : imageRequest = imageQueue[reqId] 
-		if !iReq.active && currentImages < maxImages:
-			var cacheFilename : String = EditorInterface.get_editor_paths().get_cache_dir().path_join(str("assetimage_", iReq.url.md5_text()))
-			var headers : PackedStringArray
-
-			if FileAccess.file_exists(str(cacheFilename, ".etag")) && FileAccess.file_exists(str(cacheFilename, ".data")):
-				var file : FileAccess = FileAccess.open(str(cacheFilename, ".etag"), FileAccess.READ)
-				if file:
-					headers.push_back(str("If-None-Match: ", file.get_line()))
-
-			var error = iReq.request.request(iReq.url, headers)
-			if error != OK:
-				toDelete.push_back(reqId)
-			else:
-				iReq.active = true
-			currentImages += 1
-		elif iReq.active:
-			currentImages += 1
-
-	while toDelete.size():
-		imageQueue[toDelete.front()].request.queue_free()
-		imageQueue.erase(toDelete.pop_front())
-
-class imageRequest:
-	var url : String
-	var id : int
-	var request : HTTPRequest
-	var active : bool
-	var onComplete : Callable
-
+func _import_file(dir : String):
+	install_zip(dir)
 #endregion
 
 #region Favorites
@@ -472,13 +433,19 @@ func setup_favorites():
 
 	for key in favorites:
 		var data = favorites[key]
+		data["asset_id"] = key
+		data["category_id"] = -1
+
 		var asset = assetScene.instantiate()
 
 		favouritePageParent.add_child(asset)
-		asset.setup(key, data["title"], data["author"], data["icon_url"], self)
+		asset.setup(data, self, true)
+	
+	for asset in assetPageAssets:
+		asset.update_favorited()
 
-func add_favorite(id, name, author, url):
-	var data = {"title" : name, "author" : author, "icon_url" : url}
+func add_favorite(id, name, type, author, license, url):
+	var data = {"title" : name, "category" : type, "author" : author, "cost" : license, "icon_url" : url}
 	favorites[id] = data
 	save_favorites()
 

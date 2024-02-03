@@ -19,10 +19,11 @@ func _enter_tree() -> void:
 	editorMainPanel = EditorInterface.get_editor_main_screen().get_parent().get_parent()
 
 	# Hide asset button
-	assetLibButton.visible = false;
+	assetLibButton.set_deferred("visible", false)
 
 	# Instantiate and add custom panel
 	assetLibInstance = assetPanel.instantiate()
+	assetLibInstance.initalize = true
 	assetLibInstance.visible = false;
 	editorMainPanel.get_parent().add_child(assetLibInstance)
 
@@ -47,8 +48,6 @@ func _get_plugin_icon() -> Texture2D:
 	return EditorInterface.get_editor_theme().get_icon("AssetLib", "EditorIcons")
 
 func _has_main_screen() -> bool:
-	if assetLibButton:
-		assetLibButton.visible = false;
 	return true
 
 func _make_visible(visible: bool) -> void:

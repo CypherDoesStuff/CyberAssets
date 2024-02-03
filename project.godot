@@ -20,4 +20,4 @@ project/assembly_name="CyberAddons"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/cyberassets/plugin.cfg", "res://addons/plugin_refresher/plugin.cfg", "res://addons/script-ide/plugin.cfg", "res://addons/zylann.editor_debugger/plugin.cfg")
+enabled=PackedStringArray("res://addons/plugin_refresher/plugin.cfg", "res://addons/script-ide/plugin.cfg", "res://addons/zylann.editor_debugger/plugin.cfg")
