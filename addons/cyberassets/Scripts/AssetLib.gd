@@ -215,6 +215,7 @@ func request_image(assetUrl : String, onRecieved : Callable):
 
 func set_preview_asset(id):
 	if(previewId == id):
+		previewPanel.visible = true
 		return
 
 	previewId = id
