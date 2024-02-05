@@ -51,6 +51,8 @@ extends Node
 @export var apiRequest : HTTPRequest
 @export var downloadRequest : HTTPRequest
 
+const previewDefaultTexture = preload("res://addons/cyberassets/Icons/plugin.svg")
+
 var assetSupportPopup : PopupMenu
 var assetFilterTimer : Timer
 
@@ -218,6 +220,7 @@ func set_preview_asset(id):
 		previewPanel.visible = true
 		return
 
+	previewIcon.texture = previewDefaultTexture
 	previewId = id
 
 	searchBlocker.visible = true

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brfokd5ebouam"
-path="res://.godot/imported/favorite_border.svg-ce22b81adf148948d22057ea2bd2c716.ctex"
+uid="uid://cxd84vkv232e1"
+path="res://.godot/imported/heart.svg-e363a50ff8083654b6add6a78f81a25e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/cyberassets/Icons/favorite_border.svg"
-dest_files=["res://.godot/imported/favorite_border.svg-ce22b81adf148948d22057ea2bd2c716.ctex"]
+source_file="res://addons/cyberassets/Icons/heart.svg"
+dest_files=["res://.godot/imported/heart.svg-e363a50ff8083654b6add6a78f81a25e.ctex"]
 
 [params]
 

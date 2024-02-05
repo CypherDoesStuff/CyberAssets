@@ -134,6 +134,8 @@ func image_update(useCache : bool, final : bool, data : PackedByteArray, id : in
 		load_err = image.load_webp_from_buffer(imageData)
 	elif bmp_signature == imageData.slice(0, 2):
 		load_err = image.load_bmp_from_buffer(imageData)
+	elif imageData.size() > 0:
+		load_err = image.load_svg_from_buffer(imageData)
 
 	var requestObject = queueState.imageQueue[id].onComplete.get_object()
 	if load_err == OK && !image.is_empty() && requestObject && !requestObject.is_queued_for_deletion():

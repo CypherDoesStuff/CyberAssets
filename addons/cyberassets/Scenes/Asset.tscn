@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://byns7pc4xcxas"]
 
 [ext_resource type="Script" path="res://addons/cyberassets/Scripts/Asset.gd" id="1_fx6hr"]
-[ext_resource type="Texture2D" uid="uid://cfaujhbr7ffjv" path="res://icon.png" id="1_knmjv"]
-[ext_resource type="Texture2D" uid="uid://brfokd5ebouam" path="res://addons/cyberassets/Icons/favorite_border.svg" id="3_2258l"]
+[ext_resource type="Texture2D" uid="uid://b1i8xs2lctwpo" path="res://addons/cyberassets/Icons/plugin.svg" id="2_jnqi3"]
+[ext_resource type="Texture2D" uid="uid://b5vmluwjk8ye3" path="res://addons/cyberassets/Icons/heart-outline.svg" id="3_1iii0"]
 [ext_resource type="Script" path="res://addons/cyberassets/Scripts/UI/FavoriteToggle.gd" id="4_3vtob"]
-[ext_resource type="Texture2D" uid="uid://ccyfu4qtby35r" path="res://addons/cyberassets/Icons/favorite.svg" id="5_cuyx5"]
+[ext_resource type="Texture2D" uid="uid://cxd84vkv232e1" path="res://addons/cyberassets/Icons/heart.svg" id="5_g87jn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5dctg"]
 
@@ -44,7 +44,7 @@ layout_mode = 2
 [node name="TextureButton" type="TextureButton" parent="MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture_normal = ExtResource("1_knmjv")
+texture_normal = ExtResource("2_jnqi3")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -89,17 +89,19 @@ layout_mode = 2
 alignment = 2
 
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5dctg")
 toggle_mode = true
-icon = ExtResource("3_2258l")
+icon = ExtResource("3_1iii0")
 flat = true
 icon_alignment = 2
 vertical_icon_alignment = 0
+expand_icon = true
 script = ExtResource("4_3vtob")
-unpressedIcon = ExtResource("3_2258l")
-pressedIcon = ExtResource("5_cuyx5")
+unpressedIcon = ExtResource("3_1iii0")
+pressedIcon = ExtResource("5_g87jn")
 
 [node name="Control" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
