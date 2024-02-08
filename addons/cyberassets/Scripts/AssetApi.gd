@@ -124,6 +124,7 @@ func image_update(useCache : bool, final : bool, data : PackedByteArray, id : in
 	var jpg_signature = PackedByteArray([255, 216, 255])
 	var webp_signature = PackedByteArray([82, 73, 70, 70])
 	var bmp_signature = PackedByteArray([66, 77])
+	var gif_signature = PackedByteArray([71, 73, 70, 56])
 		
 	var load_err = ERR_PARAMETER_RANGE_ERROR
 	if png_signature == imageData.slice(0, 8):
@@ -134,6 +135,8 @@ func image_update(useCache : bool, final : bool, data : PackedByteArray, id : in
 		load_err = image.load_webp_from_buffer(imageData)
 	elif bmp_signature == imageData.slice(0, 2):
 		load_err = image.load_bmp_from_buffer(imageData)
+	elif gif_signature == imageData.slice(0, 4): #resolve gif
+		load_err = ERR_FILE_CANT_READ
 	elif imageData.size() > 0:
 		load_err = image.load_svg_from_buffer(imageData)
 
@@ -142,7 +145,6 @@ func image_update(useCache : bool, final : bool, data : PackedByteArray, id : in
 		var imgTexture := ImageTexture.create_from_image(image)
 		queueState.imageQueue[id].onComplete.call(imgTexture)
 		imageSet = true
-
 	pass
 
 func update_image_queue():	
