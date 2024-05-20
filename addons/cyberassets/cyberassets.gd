@@ -13,8 +13,8 @@ var assetLibInstance
 
 func _enter_tree() -> void:
 	# Grab the asset menu related ui
-	assetLibButton = EditorInterface.get_base_control().get_node("@VBoxContainer@14/@EditorTitleBar@15/@HBoxContainer@4053/AssetLib")
-	assetLibRoot = EditorInterface.get_base_control().get_node("@VBoxContainer@14/@HSplitContainer@17/@HSplitContainer@25/@HSplitContainer@33/@VBoxContainer@34/@VSplitContainer@36/@VSplitContainer@62/@VBoxContainer@63/@PanelContainer@110/MainScreen/@EditorAssetLibrary@11137")
+	assetLibButton = EditorInterface.get_base_control().find_child("AssetLib", true, false)
+	assetLibRoot = EditorInterface.get_editor_main_screen().find_child("*EditorAssetLibrary*", true, false)
 	
 	editorMainPanel = EditorInterface.get_editor_main_screen().get_parent().get_parent()
 
@@ -24,8 +24,8 @@ func _enter_tree() -> void:
 	# Instantiate and add custom panel
 	assetLibInstance = assetPanel.instantiate()
 	assetLibInstance.initalize = true
-	assetLibInstance.visible = false;
-	editorMainPanel.get_parent().add_child(assetLibInstance)
+	EditorInterface.get_editor_main_screen().add_child(assetLibInstance)
+	_make_visible(false)
 
 	# Let user know were enabled
 	print("Enabled Asset Lib!")
@@ -53,7 +53,6 @@ func _has_main_screen() -> bool:
 func _make_visible(visible: bool) -> void:
 	if assetLibInstance:
 		assetLibInstance.visible = visible
-		editorMainPanel.visible = !visible;
 
 func _show_asset_browser() -> void:
 	assetLibInstance.visible = !assetLibInstance.visible

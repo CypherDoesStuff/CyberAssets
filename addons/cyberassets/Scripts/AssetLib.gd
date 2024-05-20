@@ -4,102 +4,102 @@ extends Node
 @export_category("Asset Lib")
 
 @export_group("Search")
-@export var assetPageParent : Control
-@export var assetSearchBar : LineEdit
-@export var assetManageButton : Button
-@export var assetPageScroll : ScrollContainer
-@export var searchBlocker : Control
+@export var assetPageParent: Control
+@export var assetSearchBar: LineEdit
+@export var assetManageButton: Button
+@export var assetPageScroll: ScrollContainer
+@export var searchBlocker: Control
 
 @export_group("Preview")
-@export var previewPanel : Control
-@export var previewIcon : TextureRect
-@export var previewTitle : RichTextLabel
-@export var previewDescription : RichTextLabel
-@export var previewInstallButton : Button
-@export var previewViewFilesButton : Button
-@export var previewCloseButton : Button
-@export var previewThumbnails : Control
+@export var previewPanel: Control
+@export var previewIcon: TextureRect
+@export var previewTitle: RichTextLabel
+@export var previewDescription: RichTextLabel
+@export var previewInstallButton: Button
+@export var previewViewFilesButton: Button
+@export var previewCloseButton: Button
+@export var previewThumbnails: Control
 
 @export_group("Install")
-@export var installWindow : ConfirmationDialog
-@export var installLocationWindow : FileDialog
-@export var installWindowName : Label
-@export var installTree : Tree
-@export var installChangePathButton : Button
-@export var installIgnoreAssetRoot : CheckBox
-@export var installConflictsLabel : Label
+@export var installWindow: ConfirmationDialog
+@export var installLocationWindow: FileDialog
+@export var installWindowName: Label
+@export var installTree: Tree
+@export var installChangePathButton: Button
+@export var installIgnoreAssetRoot: CheckBox
+@export var installConflictsLabel: Label
 
 @export_group("Import")
-@export var importButton : Button
-@export var importFileDialouge : FileDialog
+@export var importButton: Button
+@export var importFileDialouge: FileDialog
 
 @export_group("Filters")
-@export var assetShowPluginsButton : Button
-@export var assetSortOptions : OptionButton
-@export var assetCategoryOptions : OptionButton
-@export var assetSiteOptions : OptionButton
-@export var assetSupportMenu : MenuButton
+@export var assetShowPluginsButton: Button
+@export var assetSortOptions: OptionButton
+@export var assetCategoryOptions: OptionButton
+@export var assetSiteOptions: OptionButton
+@export var assetSupportMenu: MenuButton
 
 @export_group("Page")
-@export var pageSelectTop : HBoxContainer
-@export var pageSelectBottom : HBoxContainer
+@export var pageSelectTop: HBoxContainer
+@export var pageSelectBottom: HBoxContainer
 
 @export_group("Favorites")
-@export var favouritePageParent : Control
+@export var favouritePageParent: Control
 
 @export_category("HTTP")
-@export var apiRequest : HTTPRequest
-@export var downloadRequest : HTTPRequest
+@export var apiRequest: HTTPRequest
+@export var downloadRequest: HTTPRequest
 
-const previewDefaultTexture = preload("res://addons/cyberassets/Icons/plugin.svg")
+const previewDefaultTexture = preload ("res://addons/cyberassets/Icons/plugin.svg")
 
-var assetSupportPopup : PopupMenu
-var assetFilterTimer : Timer
+var assetSupportPopup: PopupMenu
+var assetFilterTimer: Timer
 
-const assetScene = preload("res://addons/cyberassets/Scenes/Asset.tscn")
+const assetScene = preload ("res://addons/cyberassets/Scenes/Asset.tscn")
 const assetDefaultUrl = "https://godotengine.org/asset-library/api"
 const assetFilterSearchTime = 0.25
 
 #api
-const apiScript = preload("res://addons/cyberassets/Scripts/AssetApi.gd")
-const installer = preload("res://addons/cyberassets/Scripts/AssetInstaller.gd")
+const apiScript = preload ("res://addons/cyberassets/Scripts/AssetApi.gd")
+const installer = preload ("res://addons/cyberassets/Scripts/AssetInstaller.gd")
 
 const installDefaultPath = "res://"
 
 var api = apiScript.new()
-var apiUrl : String = assetDefaultUrl
+var apiUrl: String = assetDefaultUrl
 
 #filters
-var assetFilter : String = ""
-var assetCategory : int = 0
-var assetReverse : bool = false
-var assetVersion : String
-var assetPage : int = 0
-var assetSort : String
-var assetSupport : Array = [1,1,0]
+var assetFilter: String = ""
+var assetCategory: int = 0
+var assetReverse: bool = false
+var assetVersion: String
+var assetPage: int = 0
+var assetSort: String
+var assetSupport: Array = [1, 1, 0]
 
-var assetPageAssets : Array = []
+var assetPageAssets: Array = []
 
 #preview
-var previewId : String
-var previewDownloadUrl : String
-var previewFileUrl : String
+var previewId: String
+var previewDownloadUrl: String
+var previewFileUrl: String
 
 #install
-var installPath : String = installDefaultPath
-var installFiles : Array
-var installTreeDict : Dictionary
+var installPath: String = installDefaultPath
+var installFiles: Array
+var installTreeDict: Dictionary
 
-var initalize : bool
-var useThreads : bool
-var availableUrls : Dictionary 
-var favorites : Dictionary
+var initalize: bool
+var useThreads: bool
+var availableUrls: Dictionary
+var favorites: Dictionary
 
 signal _on_install_window_response(isCancel)
 
 func _ready() -> void:
 	if !initalize:
-		return 
+		return
 
 	add_child(api)
 
@@ -163,7 +163,7 @@ func _ready() -> void:
 
 	assetFilterTimer.timeout.connect(search_asset_page)
 
-	var urlKey :String = assetSiteOptions.get_item_text(0)
+	var urlKey: String = assetSiteOptions.get_item_text(0)
 	apiUrl = availableUrls[urlKey]
 
 	search_asset_page()
@@ -186,7 +186,7 @@ func search_asset_page():
 	searchBlocker.visible = false
 	if libraryData:
 		var assets = libraryData["result"]
-		var resultMaxPage : int = libraryData["pages"]
+		var resultMaxPage: int = libraryData["pages"]
 		
 		pageSelectTop.maxPage = resultMaxPage
 		pageSelectBottom.maxPage = resultMaxPage
@@ -197,7 +197,7 @@ func search_asset_page():
 		setup_page(assets)
 	pass
 
-func setup_page(assets : Array):
+func setup_page(assets: Array):
 	for asset in assetPageAssets:
 		asset.queue_free()
 
@@ -212,11 +212,11 @@ func setup_page(assets : Array):
 	
 	assetPageScroll.set_deferred("scroll_vertical", 0)
 
-func request_image(assetUrl : String, onRecieved : Callable):
+func request_image(assetUrl: String, onRecieved: Callable):
 	api.request_image(assetUrl, useThreads, onRecieved)
 
 func set_preview_asset(id):
-	if(previewId == id):
+	if (previewId == id):
 		previewPanel.visible = true
 		return
 
@@ -225,7 +225,6 @@ func set_preview_asset(id):
 
 	searchBlocker.visible = true
 	var data = await api.request_asset_from_id(apiUrl, id, apiRequest)
-
 
 	if !data.is_empty():
 		previewTitle.text = data["title"]
@@ -241,10 +240,10 @@ func set_preview_asset(id):
 	previewPanel.visible = true
 	searchBlocker.visible = false
 
-func set_preview_asset_icon(texture : Texture2D):
+func set_preview_asset_icon(texture: Texture2D):
 	previewIcon.texture = texture
 
-func add_preview_thumbnail(texture : Texture2D):
+func add_preview_thumbnail(texture: Texture2D):
 	var thumb = TextureRect.new()
 	thumb.texture = texture
 	thumb.expand_mode = TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
@@ -255,17 +254,17 @@ func install():
 	if !previewDownloadUrl.is_empty():
 		install_download(previewDownloadUrl, previewId)
 
-func install_id(id : String):
+func install_id(id: String):
 	var assetData = await api.request_asset_from_id(apiUrl, id, apiRequest)
 	install_download(assetData["download_url"], id)
 
-func install_download(url : String, id : String):
+func install_download(url: String, id: String):
 	var assetPath = await installer.download(url, id, downloadRequest)
 	if !assetPath.is_empty():
 		installPath = installDefaultPath
 		install_zip(assetPath)
 
-func install_zip(path : String):
+func install_zip(path: String):
 	installFiles = installer.get_zip_files_from_path(path)
 	if installFiles.size() > 0:
 		installIgnoreAssetRoot.button_pressed = true
@@ -285,7 +284,7 @@ func install_zip(path : String):
 		EditorInterface.get_resource_filesystem().scan()
 		print(str("Cyber Asset: Installed ", previewTitle.text, " Sucessfully!"))
 
-func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
+func update_install_dialouge(assetFiles: Array, ignoreRoot: bool):
 	installWindowName.text = previewTitle.text
 	var conflicts = false
 
@@ -334,59 +333,57 @@ func update_install_dialouge(assetFiles : Array, ignoreRoot : bool):
 	if conflicts:
 		installConflictsLabel.text = "File Conflicts Found"
 
-
 func install_get_file_selection() -> Dictionary:
-	var installFileSelection : Dictionary
+	var installFileSelection: Dictionary
 	for key in installTreeDict:
-		installFileSelection[key] = installTreeDict[key].is_checked(0) || installTreeDict[key].is_indeterminate(0)
+		installFileSelection[key] = installTreeDict[key].is_checked(0)||installTreeDict[key].is_indeterminate(0)
 	return installFileSelection
 
-
-func check_dir_or_file_exists(path : String) -> bool:
-	if DirAccess.dir_exists_absolute(path) || FileAccess.file_exists(path): 
+func check_dir_or_file_exists(path: String) -> bool:
+	if DirAccess.dir_exists_absolute(path)||FileAccess.file_exists(path):
 		return true
 	
 	return false
 
-func set_search_filter(filter : String):
+func set_search_filter(filter: String):
 	assetSearchBar.text = filter
 	assetFilter = filter
 	assetPage = 0
 	search_asset_page()
 
-func set_search_category(category : int):
+func set_search_category(category: int):
 	assetCategoryOptions.selected = category
 	assetCategory = category
 	search_asset_page()
 
 #region UISignals
-func _on_asset_search(filter : String):
+func _on_asset_search(filter: String):
 	assetFilter = filter
 	assetPage = 0
 	assetFilterTimer.start(assetFilterSearchTime)
 
-func _on_asset_sort(type : int):
+func _on_asset_sort(type: int):
 	#sneaky way to simplify this
-	assetSort = str(["updated","updated","name","name","cost","cost"][type])
-	assetReverse = [false,true,false,true,false,true][type]
+	assetSort = str(["updated", "updated", "name", "name", "cost", "cost"][type])
+	assetReverse = [false, true, false, true, false, true][type]
 	search_asset_page()
 
-func _on_asset_category(type : int):
+func _on_asset_category(type: int):
 	assetCategory = type
 	search_asset_page()
 
-func _on_asset_support(index : int):
+func _on_asset_support(index: int):
 	#for some reason this is nessesary? Replace later if possible
 	assetSupportPopup.set_item_checked(index, !assetSupportPopup.is_item_checked(index))
 	assetSupport[index] = assetSupportPopup.is_item_checked(index)
 	search_asset_page()
 
-func _on_asset_site(site : int):
+func _on_asset_site(site: int):
 	var key := assetSiteOptions.get_item_text(site)
 	apiUrl = availableUrls[key]
 	search_asset_page()
 
-func _on_asset_page(page : int):
+func _on_asset_page(page: int):
 	assetPage = page
 
 	#update page select nodes... keep false so no resursive
@@ -420,7 +417,7 @@ func _install_ignore_parent_pressed():
 func _install_change_path():
 	EditorInterface.popup_dialog_centered(installLocationWindow)
 
-func _install_set_path(dir : String):
+func _install_set_path(dir: String):
 	installPath = dir
 	print(installPath)
 
@@ -433,7 +430,7 @@ func _manage_plugins():
 func _import_dialouge_show():
 	EditorInterface.popup_dialog_centered(importFileDialouge)
 
-func _import_file(dir : String):
+func _import_file(dir: String):
 	install_zip(dir)
 #endregion
 
@@ -466,7 +463,7 @@ func setup_favorites():
 		asset.update_favorited()
 
 func add_favorite(id, name, type, author, license, url):
-	var data = {"title" : name, "category" : type, "author" : author, "cost" : license, "icon_url" : url}
+	var data = {"title": name, "category": type, "author": author, "cost": license, "icon_url": url}
 	favorites[id] = data
 	save_favorites()
 
